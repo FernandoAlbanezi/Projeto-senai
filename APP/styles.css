@@ -1,0 +1,135 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+header {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+h1, h2, h3 {
+  margin: 0.5rem 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: white;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+th {
+  background-color: #007BFF;
+  color: white;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  margin: 0.2rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #007BFF;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn-action {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #007BFF;
+  font-size: 1.1rem;
+  margin-right: 0.3rem;
+}
+
+.btn-action:hover {
+  color: #0056b3;
+}
+
+/* Status */
+.status-producao {
+  color: orange;
+  font-weight: bold;
+}
+.status-inspecao {
+  color: purple;
+  font-weight: bold;
+}
+.status-estoque {
+  color: green;
+  font-weight: bold;
+}
+.status-transporte {
+  color: blue;
+  font-weight: bold;
+}
+.status-finalizado {
+  color: gray;
+  font-weight: bold;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: white;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  position: relative;
+  max-width: 400px;
+  width: 90%;
+}
+
+.modal-close {
+  position: absolute;
+  top: 0.3rem;
+  right: 0.7rem;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+}
+
+.modal-buttons {
+  margin-top: 1rem;
+  text-align: right;
+}

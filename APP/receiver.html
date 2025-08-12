@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Receber Vídeo do Celular</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #222;
+    color: #eee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  video {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 12px;
+    box-shadow: 0 0 25px #27ae60;
+    background: black;
+  }
+  #status {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #27ae60;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    color: #fff;
+    box-shadow: 0 0 10px #27ae60aa;
+  }
+</style>
+</head>
+<body>
+  <div id="status">Aguardando vídeo do celular...</div>
+  <video id="remoteVideo" autoplay playsinline></video>
+
+<script>
+  const signalingServerUrl = "ws://10.126.48.68:8080"; // Seu IP local
+  const ws = new WebSocket(signalingServerUrl);
+
+  let pc = new RTCPeerConnection({
+    iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+  });
+
+  const remoteVideo = document.getElementById('remoteVideo');
+  const statusDiv = document.getElementById('status');
+
+  ws.onopen = () => {
+    statusDiv.textContent = 'Conectado ao servidor de sinalização.';
+    console.log('WebSocket conectado.');
+    ws.send(JSON.stringify({ type: 'receiver-ready' }));
+  };
+
+  ws.onmessage = async (message) => {
+    const data = JSON.parse(message.data);
+
+    if(data.type === 'offer') {
+      await pc.setRemoteDescription(new RTCSessionDescription(data.offer));
+      const answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+      ws.send(JSON.stringify({ type: 'answer', answer: answer }));
+    }
+    else if(data.type === 'candidate') {
+      try {
+        await pc.addIceCandidate(new RTCIceCandidate(data.candidate));
+      } catch(e) {
+        console.error(e);
+      }
+    }
+  };
+
+  pc.ontrack = (event) => {
+    remoteVideo.srcObject = event.streams[0];
+    statusDiv.textContent = 'Vídeo recebido!';
+  };
+
+  pc.onicecandidate = (event) => {
+    if(event.candidate) {
+      ws.send(JSON.stringify({ type: 'candidate', candidate: event.candidate }));
+    }
+  };
+</script>
+</body>
+</html>
